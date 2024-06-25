@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerar Rotas com Google Maps API</title>
+<style>
+    /* Estilos opcionais para o mapa */
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+</head>
+<body>
+<h1>Gerar Rotas com Google Maps API</h1>
+
+<!-- Mapa -->
+<div id="map"></div>
+
+<!-- Formulário de entrada de endereços -->
+<div>
+    <label for="origin-input">Origem:</label>
+    <input id="origin-input" type="text" value="Fortaleza, Brasil">
+    <br>
+    <label for="destination-input">Destino:</label>
+    <input id="destination-input" type="text" value="Caucaia, Brasil">
+    <br>
+    <button id="submit-button">Calcular Rota</button>
+</div>
+
+<script>
+    // Função de inicialização do mapa
+    function initMap() {
+        // Coordenadas iniciais (exemplo: Fortaleza)
+        var fortaleza = { lat: -3.7172, lng: -38.5432 };
+
+        // Opções do mapa
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: fortaleza
+        });
+
+        // Criando um DirectionsService e um DirectionsRenderer
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer({
+            map: map
+        });
+
+        // Capturar elementos do formulário
+        var originInput = document.getElementById('origin-input');
+        var destinationInput = document.getElementById('destination-input');
+        var submitButton = document.getElementById('submit-button');
+
+        // Função para calcular e exibir rota
+        function calculateAndDisplayRoute() {
+            var origin = originInput.value;
+            var destination = destinationInput.value;
+
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: 'DRIVING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    window.alert('Não foi possível calcular a rota: ' + status);
+                }
+            });
+        }
+
+        // Adicionar evento de clique ao botão de enviar
+        submitButton.addEventListener('click', function() {
+            calculateAndDisplayRoute();
+        });
+    }
+</script>
+
+<!-- Script da API do Google Maps com sua chave -->
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0QXQWhme97yyqYQHyBHHBwmPasNdEWDo&callback=initMap">
+</script>
+
+</body>
+</html>
